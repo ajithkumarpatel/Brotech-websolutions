@@ -88,7 +88,12 @@ const Chatbot: React.FC = () => {
   const initializeBot = () => {
     if (chatRef.current) return;
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        if (!process.env.REACT_APP_API_KEY) {
+            console.error("Gemini AI key is missing. Chatbot will be disabled.");
+            setMessages(prev => [...prev, { text: "Sorry, the AI assistant is currently unavailable due to a configuration issue.", sender: 'bot' }]);
+            return;
+        }
+        const ai = new GoogleGenAI({ apiKey: process.env.REACT_APP_API_KEY });
         chatRef.current = ai.chats.create({
             model: 'gemini-2.5-flash',
             config: {

@@ -53,7 +53,7 @@
  *       carefully. Never allow public write access unless intended.
  *
  * 3.  **API Key is Correct in Vercel:**
- *     - Ensure the `API_KEY` environment variable in your Vercel project settings
+ *     - Ensure the `REACT_APP_API_KEY` environment variable in your Vercel project settings
  *       matches the `apiKey` from your Firebase project's web app configuration.
  *
  * =====================================================================================
@@ -63,7 +63,7 @@ import { getFirestore, Firestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
+  apiKey: process.env.REACT_APP_API_KEY, // Vercel requires this prefix for client-side variables
   authDomain: "brotech-web-solutions.firebaseapp.com",
   projectId: "brotech-web-solutions",
   storageBucket: "brotech-web-solutions.appspot.com",
@@ -78,7 +78,7 @@ try {
     const app = initializeApp(firebaseConfig);
     db = getFirestore(app);
   } else {
-    console.warn("CRITICAL: Firebase API key is missing. Firebase features will be disabled. To fix this, add an environment variable named 'API_KEY' with your Firebase API key in your Vercel project settings and redeploy.");
+    console.warn("CRITICAL: Firebase API key is missing. Firebase features will be disabled. To fix this, add an environment variable named 'REACT_APP_API_KEY' in your Vercel project settings and redeploy.");
   }
 } catch (error) {
   console.error("An error occurred during Firebase initialization:", error);

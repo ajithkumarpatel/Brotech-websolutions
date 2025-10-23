@@ -4,11 +4,11 @@ This guide explains the single most important step to get your deployed website 
 
 ## The Problem: "Could not connect to the database" Error
 
-After deploying, you might see errors on pages like the Blog or Pricing, stating that the application cannot connect to the database or that the API key is missing.
+After deploying, you will see errors on pages like the Blog or Pricing, stating that the application cannot connect to the database or that the API key is missing.
 
-This is expected behavior because your live website, for security reasons, does not have access to your secret API key. You must provide it to Vercel.
+This is because your live website, for security reasons, cannot access your secret API key unless you provide it in a specific format.
 
-## The Solution: Add the API Key to Vercel
+## The Solution: Add the Prefixed API Key to Vercel
 
 Follow these three steps to fix the issue permanently.
 
@@ -21,13 +21,13 @@ Follow these three steps to fix the issue permanently.
 5.  Find the `apiKey` value in the configuration object. It will be a long string of characters.
 6.  **Copy this entire key.**
 
-### Step 2: Add the API Key to Vercel
+### Step 2: Add the API Key to Vercel with the Correct Name
 
 1.  Open your project dashboard on [Vercel](https://vercel.com/dashboard).
 2.  Go to the **Settings** tab.
 3.  Click on **Environment Variables** in the left-hand menu.
-4.  Create a new variable with these **exact** details:
-    -   **Name:** `API_KEY`
+4.  Create a new variable with these **exact** details. The name is very important.
+    -   **Name:** `REACT_APP_API_KEY`
     -   **Value:** Paste the API key you copied from Firebase.
 5.  Click **Save**.
 
