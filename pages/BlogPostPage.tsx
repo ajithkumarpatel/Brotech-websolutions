@@ -7,6 +7,7 @@ import { BlogPost } from '../types';
 import Section from '../components/Section';
 import LoadingSpinner from '../components/LoadingSpinner';
 import FirestoreIndexError from '../components/FirestoreIndexError';
+import AdminSetupError from '../components/AdminSetupError';
 
 const proseStyles = `
 .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
@@ -63,6 +64,7 @@ const BlogPostPage: React.FC = () => {
     const [post, setPost] = useState<BlogPost | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isConfigError, setIsConfigError] = useState(false);
     const [diagnosticInfo, setDiagnosticInfo] = useState<string | null>(null);
 
     useEffect(() => {
@@ -74,7 +76,7 @@ const BlogPostPage: React.FC = () => {
             }
 
             if (!db) {
-                setError("Could not connect to the database to fetch the post. Please ensure the API key is configured correctly.");
+                setIsConfigError(true);
                 setLoading(false);
                 return;
             }
@@ -123,6 +125,14 @@ const BlogPostPage: React.FC = () => {
 
     if (loading) {
         return <div className="h-screen flex items-center justify-center"><LoadingSpinner /></div>;
+    }
+    
+    if (isConfigError) {
+        return (
+            <div className="container mx-auto px-4 md:px-8 py-20 pt-32">
+                <AdminSetupError />
+            </div>
+        );
     }
 
     if (error) {

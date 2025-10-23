@@ -7,16 +7,18 @@ import Section from '../components/Section';
 import BlogPostCard from '../components/BlogPostCard';
 import { Info } from 'lucide-react';
 import FirestoreIndexError from '../components/FirestoreIndexError';
+import AdminSetupError from '../components/AdminSetupError';
 
 const BlogPage: React.FC = () => {
     const [posts, setPosts] = React.useState<BlogPost[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
+    const [isConfigError, setIsConfigError] = React.useState(false);
 
     React.useEffect(() => {
         const fetchPosts = async () => {
             if (!db) {
-                setError("Could not connect to the database to fetch blog posts. Please ensure the API key is configured correctly.");
+                setIsConfigError(true);
                 setLoading(false);
                 return;
             }
@@ -88,6 +90,10 @@ const BlogPage: React.FC = () => {
     const renderContent = () => {
         if (loading) {
             return [...Array(3)].map((_, i) => <BlogSkeletonCard key={i} />);
+        }
+        
+        if (isConfigError) {
+            return <AdminSetupError />;
         }
 
         if (error) {

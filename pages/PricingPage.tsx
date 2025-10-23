@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import AdminSetupError from '../components/AdminSetupError';
 
 const PricingCard: React.FC<{ plan: PricingPlan }> = ({ plan }) => (
     <div className={`relative bg-white dark:bg-dark-card p-8 rounded-lg shadow-lg border-2 transition-all duration-300 flex flex-col ${plan.isPopular ? 'border-primary md:scale-105' : 'border-transparent'}`}>
@@ -53,11 +54,12 @@ const PricingPage: React.FC = () => {
     const [plans, setPlans] = useState<PricingPlan[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isConfigError, setIsConfigError] = useState(false);
 
     useEffect(() => {
         const fetchPlans = async () => {
             if (!db) {
-                setError('Failed to connect to the database. Please ensure the API key is configured correctly.');
+                setIsConfigError(true);
                 setLoading(false);
                 return;
             }
@@ -109,6 +111,8 @@ const PricingPage: React.FC = () => {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                     {loading ? (
                         [...Array(3)].map((_, i) => <PricingSkeletonCard key={i} />)
+                    ) : isConfigError ? (
+                        <AdminSetupError />
                     ) : error ? (
                         <p className="text-center text-red-500 col-span-full">{error}</p>
                     ) : plans.length === 0 ? (
